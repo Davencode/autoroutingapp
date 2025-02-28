@@ -1,8 +1,17 @@
 import 'package:autoroutingapp/routes/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(
+      EasyLocalization(
+        supportedLocales: const[Locale('it'), Locale('en')],
+        path: 'assets/languages',
+        fallbackLocale: const Locale('it'),
+        child: MyApp()
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,7 +22,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      // hook up router to MaterialApp
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       routerConfig: _appRouter.config(),
     );
   }
